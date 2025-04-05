@@ -1,0 +1,54 @@
+import cv2
+import matplotlib.pyplot as plt 
+
+# Assuming you have a list of image file names in 'ab1_file_list.txt'
+with open("ab1_file_list.txt", 'r') as file:
+    image_file_list = file.read().splitlines()
+
+# Set the size of each individual image
+image_size = (20, 10)
+
+# Set the number of rows and columns in the grid
+rows = 5
+columns = 2
+
+# Initialize a counter for the current subplot
+subplot_counter = 1
+
+# Initialize a counter for the grid
+grid_counter = 1 
+
+# Create a new figure
+fig, axes = plt.subplots(rows, columns, figsize=(columns * image_size[0], rows * image_size[1]))
+
+# Loop through each image file name
+for filename in image_file_list:
+    # Read the image with cv2.IMREAD_UNCHANGED flag
+    image = cv2.imread(f"{filename}.png", cv2.IMREAD_UNCHANGED)
+    if image is not None:
+        if image.shape[2] == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        # Add the image to the subplot
+        fig.add_subplot(rows, columns, subplot_counter)
+        plt.imshow(image)
+        plt.axis('off')
+
+        # Increment the subplot counter
+        subplot_counter += 1
+
+        # If the subplot counter exceeds the total number of subplots in the grid, create a new figure
+        if subplot_counter > rows * columns:
+            plt.subplots_adjust(wspace=0, hspace=0)
+            plt.savefig(f'Grid_{grid_counter}.png', bbox_inches='tight')
+            plt.close()
+            fig, axes = plt.subplots(rows, columns, figsize=(columns * image_size[0], rows * image_size[1]))
+            subplot_counter = 1
+            grid_counter += 1
+
+
+# Save the last grid if needed
+if subplot_counter > 1:
+    plt.subplots_adjust(wspace=0, hspace=0)
+    plt.savefig(f'Grid_{grid_counter}.png', bbox_inches='tight')
+    plt.close()
