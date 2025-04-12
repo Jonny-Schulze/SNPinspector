@@ -1,3 +1,5 @@
+# UNDER CONSTRUCTION
+
 # SNPdetector
 This Python modul is based on [PySanger by ponnhide](https://github.com/ponnhide/PySanger).
 The modul was adapted to allow calling of an ambigous base ("N") on positions with more than one trace signal.
